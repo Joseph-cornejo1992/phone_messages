@@ -48,11 +48,11 @@
             this.doctorComboBox2 = new System.Windows.Forms.ComboBox();
             this.infoPanel = new System.Windows.Forms.Panel();
             this.patientInfoPanel = new System.Windows.Forms.Panel();
+            this.operatorLabel = new System.Windows.Forms.Label();
+            this.operatorTextBox = new System.Windows.Forms.TextBox();
             this.telephoneLabel = new System.Windows.Forms.Label();
             this.phoneTextBox = new System.Windows.Forms.TextBox();
-            this.operatorTextBox = new System.Windows.Forms.TextBox();
             this.reviewMessagesButton = new System.Windows.Forms.Button();
-            this.operatorLabel = new System.Windows.Forms.Label();
             this.infoPanel.SuspendLayout();
             this.patientInfoPanel.SuspendLayout();
             this.SuspendLayout();
@@ -294,6 +294,23 @@
             this.patientInfoPanel.Size = new System.Drawing.Size(873, 373);
             this.patientInfoPanel.TabIndex = 20;
             // 
+            // operatorLabel
+            // 
+            this.operatorLabel.AutoSize = true;
+            this.operatorLabel.Location = new System.Drawing.Point(3, 315);
+            this.operatorLabel.Name = "operatorLabel";
+            this.operatorLabel.Size = new System.Drawing.Size(66, 13);
+            this.operatorLabel.TabIndex = 22;
+            this.operatorLabel.Text = "By Operator:";
+            // 
+            // operatorTextBox
+            // 
+            this.operatorTextBox.Location = new System.Drawing.Point(5, 331);
+            this.operatorTextBox.Name = "operatorTextBox";
+            this.operatorTextBox.Size = new System.Drawing.Size(370, 20);
+            this.operatorTextBox.TabIndex = 21;
+            this.operatorTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
+            // 
             // telephoneLabel
             // 
             this.telephoneLabel.AutoSize = true;
@@ -313,14 +330,6 @@
             this.phoneTextBox.Size = new System.Drawing.Size(302, 20);
             this.phoneTextBox.TabIndex = 19;
             // 
-            // operatorTextBox
-            // 
-            this.operatorTextBox.Location = new System.Drawing.Point(5, 331);
-            this.operatorTextBox.Name = "operatorTextBox";
-            this.operatorTextBox.Size = new System.Drawing.Size(370, 20);
-            this.operatorTextBox.TabIndex = 21;
-            this.operatorTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
-            // 
             // reviewMessagesButton
             // 
             this.reviewMessagesButton.BackColor = System.Drawing.Color.Orange;
@@ -330,15 +339,7 @@
             this.reviewMessagesButton.TabIndex = 21;
             this.reviewMessagesButton.Text = "Review Messages";
             this.reviewMessagesButton.UseVisualStyleBackColor = false;
-            // 
-            // operatorLabel
-            // 
-            this.operatorLabel.AutoSize = true;
-            this.operatorLabel.Location = new System.Drawing.Point(3, 315);
-            this.operatorLabel.Name = "operatorLabel";
-            this.operatorLabel.Size = new System.Drawing.Size(66, 13);
-            this.operatorLabel.TabIndex = 22;
-            this.operatorLabel.Text = "By Operator:";
+            this.reviewMessagesButton.Click += new System.EventHandler(this.reviewMessagesButton_Click);
             // 
             // enterPhoneMessages
             // 
