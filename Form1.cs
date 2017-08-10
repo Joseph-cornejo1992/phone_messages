@@ -54,9 +54,10 @@ namespace PhoneMessages
                 VALUES (100000, 'Bob', 'Ross', 2, 7, date, 0247, 94, 13864559825, 'Patient is testing', 'Test')";
 
 
-           /*     string insertString1;
-                String.Format(@"INSERT INTO phone_messages('{0}','{1}','{2},{3},{4},{5},{6},{7},{8},{9},{10})VALUES (100000, 'Bob', 'Ross', 2, 7, date, 0247, 94, 13864559825, 'Patient is testing', 'Test')",);
-           */ 
+                /*     string insertString1;
+                     String.Format(@"INSERT INTO phone_messages(account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
+                     VALUES ('{0}','{1}','{2},{3},{4},{5},{6},{7},{8},{9},{10})",);
+                */
                 // 1. Instantiate a new command with a query and connection
                 MySqlCommand cmd = new MySqlCommand(insertString, conn);
 
@@ -184,6 +185,11 @@ namespace PhoneMessages
         }
 
         private void reviewMessagesButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void infoPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }

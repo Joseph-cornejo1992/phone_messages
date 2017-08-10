@@ -269,6 +269,7 @@
             this.infoPanel.Name = "infoPanel";
             this.infoPanel.Size = new System.Drawing.Size(496, 139);
             this.infoPanel.TabIndex = 19;
+            this.infoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.infoPanel_Paint);
             // 
             // patientInfoPanel
             // 
