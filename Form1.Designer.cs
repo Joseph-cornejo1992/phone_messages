@@ -53,6 +53,7 @@
             this.telephoneLabel = new System.Windows.Forms.Label();
             this.phoneTextBox = new System.Windows.Forms.TextBox();
             this.reviewMessagesButton = new System.Windows.Forms.Button();
+            this.otherTextBox = new System.Windows.Forms.TextBox();
             this.infoPanel.SuspendLayout();
             this.patientInfoPanel.SuspendLayout();
             this.SuspendLayout();
@@ -256,10 +257,12 @@
             this.doctorComboBox2.Name = "doctorComboBox2";
             this.doctorComboBox2.Size = new System.Drawing.Size(219, 21);
             this.doctorComboBox2.TabIndex = 7;
+            this.doctorComboBox2.SelectedIndexChanged += new System.EventHandler(this.doctorComboBox2_SelectedIndexChanged);
             // 
             // infoPanel
             // 
             this.infoPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.infoPanel.Controls.Add(this.otherTextBox);
             this.infoPanel.Controls.Add(this.doctorComboBox2);
             this.infoPanel.Controls.Add(this.doctor_label);
             this.infoPanel.Controls.Add(this.statusLabel);
@@ -342,6 +345,14 @@
             this.reviewMessagesButton.UseVisualStyleBackColor = false;
             this.reviewMessagesButton.Click += new System.EventHandler(this.reviewMessagesButton_Click);
             // 
+            // otherTextBox
+            // 
+            this.otherTextBox.Location = new System.Drawing.Point(7, 97);
+            this.otherTextBox.Name = "otherTextBox";
+            this.otherTextBox.Size = new System.Drawing.Size(219, 20);
+            this.otherTextBox.TabIndex = 8;
+            this.otherTextBox.Visible = false;
+            // 
             // enterPhoneMessages
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -394,6 +405,7 @@
         private System.Windows.Forms.TextBox operatorTextBox;
         private System.Windows.Forms.Label operatorLabel;
         private System.Windows.Forms.Button reviewMessagesButton;
+        private System.Windows.Forms.TextBox otherTextBox;
     }
 }
 

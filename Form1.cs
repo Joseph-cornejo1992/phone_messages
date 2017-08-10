@@ -21,48 +21,83 @@ namespace PhoneMessages
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            
+            //error check to make sure all the fields are populated.
+            bool check = errorCheck();
+            if (check == false)
+            {
+                return;
+            }
+
+            //extracts variables from text and comboboxes
             string fName = firstNameTextBox.Text;
             string lName = lastNameTextBox.Text;
             string pNumber = phoneTextBox.Text;
             string acctNumber = accountTextBox.Text;
             string message = messageTextBox.Text;
             string age = ageTextBox.Text;
-
-            
-            bool check = errorCheck();
-
-            if(check == false)
+            string operator1 = operatorTextBox.Text;
+            string status = this.statusComboBox1.GetItemText(this.statusComboBox1.SelectedItem);
+            string doctor = this.doctorComboBox2.GetItemText(this.doctorComboBox2.SelectedItem);
+            //picks current time from DateTimePicker
+            string date1 = currentDateTimePicker.Value.Year + "-" + currentDateTimePicker.Value.Month + "-" + currentDateTimePicker.Value.Day;
+            string time = DateTime.Now.ToString("hh:mm");
+            //this changes doctor variable to name entered in othertextbox in case the operator chose the "other" selection on the doctorComboBox. 
+            if (string.Equals(doctor,"other") == true)
             {
-                return;
+                doctor = otherTextBox.Text;
             }
-              
+
             //Establish a connection
             MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Initial Catalog=phone_messages;User ID=root;Password=Xalapa123.");
 
             try
             {
+                MessageBox.Show("Sent-1");
                 conn.Open();
+
                 // prepare command string
-                string insertString = @"
-                INSERT INTO phone_messages
-                (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
-                VALUES (100000, 'Bob', 'Ross', 2, 7, date, 0247, 94, 13864559825, 'Patient is testing', 'Test')";
+                /* string insertString = @"
+                 INSERT INTO phone_messages
+                 (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
+                 VALUES (100000, 'Bob', 'Ross', 2, 7, date, 0247, 94, 13864559825, 'Patient is testing', 'Test')";
+   
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                 * First Try!
+                MessageBox.Show("Sent0");
+                string insertString = String.Format(@"INSERT INTO phone_messages(account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
+                     VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')",acctNumber,fName,lName,status,doctor,date1,time,age,pNumber,message,operator1);
+                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                 */
+                MessageBox.Show("Sent-12");
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO phone_messages (acctNumber, fName, lName, status, doctor, date1, time, age, pNumber, message, operator1)VALUES(@acctNumber, @fName, @lName, @status, @doctor, @date1, @time, @age, @pNumber, @message, @operator1", conn);
+                cmd.Parameters.AddWithValue(@acctNumber,acctNumber);
+                cmd.Parameters.AddWithValue(@fName,fName);
+                cmd.Parameters.AddWithValue(@lName,lName);
+                cmd.Parameters.AddWithValue(@status,status);
+                cmd.Parameters.AddWithValue(@doctor,doctor);
+                cmd.Parameters.AddWithValue(@date1,date1);
+                cmd.Parameters.AddWithValue(@time,time);
+                cmd.Parameters.AddWithValue(@age,age);
+                cmd.Parameters.AddWithValue(@pNumber,pNumber);
+                cmd.Parameters.AddWithValue(@message,message);
+                cmd.Parameters.AddWithValue(@operator1,operator1);
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Sent-13");
 
 
-                /*     string insertString1;
-                     String.Format(@"INSERT INTO phone_messages(account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
-                     VALUES ('{0}','{1}','{2},{3},{4},{5},{6},{7},{8},{9},{10})",);
-                */
                 // 1. Instantiate a new command with a query and connection
-                MySqlCommand cmd = new MySqlCommand(insertString, conn);
+                //MySqlCommand cmd = new MySqlCommand(insertString, conn);
 
                 // 2. Call ExecuteNonQuery to send command
-                cmd.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
+
+                MessageBox.Show("Sent1");
             }
 
             catch (Exception ex)
@@ -118,7 +153,7 @@ namespace PhoneMessages
         }
         private bool errorCheck()
         {
-            //this function serves to error check and returns false if anything is incorrect
+            //this function serves to error check and returns false if any field is not populated
 
             if (accountTextBox.TextLength > 6 || accountTextBox.TextLength < 1)
             {
@@ -170,6 +205,7 @@ namespace PhoneMessages
                 MessageBox.Show("Please select a Doctor");
                 return false;
             }
+            
             //return true if all else is fine
             return true;
         }
@@ -192,6 +228,16 @@ namespace PhoneMessages
         private void infoPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void doctorComboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {   
+            //if doctorcomboBox is set to "other", this sets the otherTextBox to visible 
+            string doctor = this.doctorComboBox2.GetItemText(this.doctorComboBox2.SelectedItem);
+            if (string.Equals(doctor, "Other") == true)
+            {
+                otherTextBox.Visible = true;
+            }
         }
     }
 }
