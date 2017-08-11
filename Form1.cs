@@ -47,6 +47,7 @@ namespace PhoneMessages
             //picks current time from DateTimePicker
             string date1 = currentDateTimePicker.Value.Year + "-" + currentDateTimePicker.Value.Month + "-" + currentDateTimePicker.Value.Day;
             string time = DateTime.Now.ToString("hh:mm");
+            
             //this changes doctor variable to name entered in othertextbox in case the operator chose the "other" selection on the doctorComboBox. 
             if (string.Equals(doctor,"other") == true)
             {
@@ -54,50 +55,52 @@ namespace PhoneMessages
             }
 
             //Establish a connection
-            MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Initial Catalog=phone_messages;User ID=root;Password=Xalapa123.");
+            MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Port=3306;Initial Catalog=phone_messages;User ID=phone_messages;Password=Ei1CW10ncoCHsaUp");
 
             try
             {
-                MessageBox.Show("Sent-1");
                 conn.Open();
 
-                // prepare command string
-                /* string insertString = @"
-                 INSERT INTO phone_messages
-                 (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
-                 VALUES (100000, 'Bob', 'Ross', 2, 7, date, 0247, 94, 13864559825, 'Patient is testing', 'Test')";
-   
-                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                 * First Try!
-                MessageBox.Show("Sent0");
-                string insertString = String.Format(@"INSERT INTO phone_messages(account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)
-                     VALUES ('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')",acctNumber,fName,lName,status,doctor,date1,time,age,pNumber,message,operator1);
-                --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                 */
-                MessageBox.Show("Sent-12");
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO phone_messages (acctNumber, fName, lName, status, doctor, date1, time, age, pNumber, message, operator1)VALUES(@acctNumber, @fName, @lName, @status, @doctor, @date1, @time, @age, @pNumber, @message, @operator1", conn);
-                cmd.Parameters.AddWithValue(@acctNumber,acctNumber);
-                cmd.Parameters.AddWithValue(@fName,fName);
-                cmd.Parameters.AddWithValue(@lName,lName);
-                cmd.Parameters.AddWithValue(@status,status);
-                cmd.Parameters.AddWithValue(@doctor,doctor);
-                cmd.Parameters.AddWithValue(@date1,date1);
-                cmd.Parameters.AddWithValue(@time,time);
-                cmd.Parameters.AddWithValue(@age,age);
-                cmd.Parameters.AddWithValue(@pNumber,pNumber);
-                cmd.Parameters.AddWithValue(@message,message);
-                cmd.Parameters.AddWithValue(@operator1,operator1);
+                if (conn.State == ConnectionState.Closed)
+                {
+                    MessageBox.Show("Connection Closed");
+                }
+                if (conn.State == ConnectionState.Open)
+                {
+                    MessageBox.Show("Connection open");
+                }
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO phone_messages (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)VALUES(@account_number, @first_name, @last_name, @status, @doctor, @date, @time, @age, @telephone_number, @message, @operator)", conn);
+                cmd.Parameters.AddWithValue("@account_number",acctNumber);
+                cmd.Parameters.AddWithValue("@first_name",fName);
+                cmd.Parameters.AddWithValue("@last_name",lName);
+                cmd.Parameters.AddWithValue("@status",status);
+                cmd.Parameters.AddWithValue("@doctor",doctor);
+                cmd.Parameters.AddWithValue("@date",date1);
+                cmd.Parameters.AddWithValue("@time",time);
+                cmd.Parameters.AddWithValue("@age",age);
+                cmd.Parameters.AddWithValue("@telephone_number",pNumber);
+                cmd.Parameters.AddWithValue("@message",message);
+                cmd.Parameters.AddWithValue("@operator",operator1);
+                if (conn.State == ConnectionState.Closed)
+                {
+                    MessageBox.Show("Connection 1 Closed");
+                }
+                if (conn.State == ConnectionState.Open)
+                {
+                    MessageBox.Show("Connection 1 open");
+                }
                 cmd.ExecuteNonQuery();
-                MessageBox.Show("Sent-13");
 
-
-                // 1. Instantiate a new command with a query and connection
-                //MySqlCommand cmd = new MySqlCommand(insertString, conn);
-
-                // 2. Call ExecuteNonQuery to send command
-                //cmd.ExecuteNonQuery();
-
-                MessageBox.Show("Sent1");
+                conn.Close();
+                MessageBox.Show("connection closed");
+               if( conn.State == ConnectionState.Closed)
+                {
+                    MessageBox.Show("Connection 2 Closed");
+                }
+                if (conn.State == ConnectionState.Open)
+                {
+                    MessageBox.Show("Connection 2 open");
+                }
             }
 
             catch (Exception ex)
@@ -105,6 +108,7 @@ namespace PhoneMessages
                 //MessageBox.Show(" Can't open connection ! ");
                 string error = string.Format("Exception: {0}", ex.Message);
             }
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -222,7 +226,8 @@ namespace PhoneMessages
 
         private void reviewMessagesButton_Click(object sender, EventArgs e)
         {
-
+            ReceivedMessages rm = new ReceivedMessages();
+            rm.Show();
         }
 
         private void infoPanel_Paint(object sender, PaintEventArgs e)

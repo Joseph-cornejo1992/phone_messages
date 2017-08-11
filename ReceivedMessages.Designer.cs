@@ -28,20 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.directoryEntry1 = new System.DirectoryServices.DirectoryEntry();
+            this.directoryEntry2 = new System.DirectoryServices.DirectoryEntry();
             this.SuspendLayout();
             // 
             // ReceivedMessages
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(879, 650);
+            this.ClientSize = new System.Drawing.Size(973, 596);
             this.Name = "ReceivedMessages";
-            this.Text = "ReceivedMessages";
+            this.Load += new System.EventHandler(this.ReceivedMessages_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Button button1;
+        private System.DirectoryServices.DirectoryEntry directoryEntry1;
+        private System.DirectoryServices.DirectoryEntry directoryEntry2;
     }
 }
