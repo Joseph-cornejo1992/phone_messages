@@ -8,73 +8,62 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace PhoneMessages
 {
     public partial class ReceivedMessages : Form
     {
-        public ReceivedMessages()
+        
+            public ReceivedMessages()
         {
             InitializeComponent();
+            get_data();
         }
-
+        MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Port=3306;Initial Catalog=phone_messages;User ID=phone_messages;Password=Ei1CW10ncoCHsaUp");
         private void ReceivedMessages_Load(object sender, EventArgs e)
         {
+            
+        }
+
+
+        private void dataGridView4_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            get_data();
+
+        }
+
+        private void get_data()
+        {
+            try
             {
-                MessageBox.Show("Hey there");
-                //Establish a connection
-                MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Port=3306;Initial Catalog=phone_messages;User ID=root;Password=Xalapa123.");
-                MySqlDataReader rdr = null;
-                MySqlCommand selectquery = new MySqlCommand("SELECT * FROM phone_messages", conn);
-                Console.WriteLine(
-                    "Account Number                   Doctor                     Last Name                Printed?");
-                Console.WriteLine(
-                "--------------                   -------                    ----------               --------");
-                MessageBox.Show("Hey there");
-                try
-                {
-                    conn.Open();
+                conn.Open();
+                String query = "SELECT status,doctor,last_Name,account_number,date,time,Printed FROM phone_messages";
+                MySqlDataAdapter MSDA = new MySqlDataAdapter(query, conn);
+                DataTable dt = new DataTable();
+                MSDA.Fill(dt);
+                dataGridView4.DataSource = dt;
+                conn.Close();
 
-                    rdr = selectquery.ExecuteReader();
-
-                    Console.WriteLine(
-                    "Account Number                   Doctor                     Last Name                Printed?");
-                    Console.WriteLine(
-                    "--------------                   -------                    ----------               --------");
-
-                    while (rdr.Read())
-                    {
-                        // get the results of each column
-                        string accountNumber = (string)rdr["account_number"];
-                        string lastName = (string)rdr["lName"];
-                        string doctor = (string)rdr["doctor"];
-
-                        MessageBox.Show(lastName + accountNumber + doctor);
-
-
-                        // print out the results
-                        Console.Write("{0,-25}", accountNumber);
-                        Console.Write("{0,-20}", lastName);
-                        Console.Write("{0,-25}", doctor);
-                        Console.WriteLine();
-
-                    }
-                }
-                finally
-                {
-                    // 3. close the reader
-                    if (rdr != null)
-                    {
-                        rdr.Close();
-                    }
-
-                    // close the connection
-                    if (conn != null)
-                    {
-                        conn.Close();
-                    }
-                }
+                dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView4.MultiSelect = false;
+                dataGridView4.RowsDefaultCellStyle.BackColor = Color.LightGray;
+                dataGridView4.AlternatingRowsDefaultCellStyle.BackColor = Color.DarkGray;
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show("ERROR: Cannot retrieve data from server",ex.ToString());
+            }
+        }
+
+        private void reprintButton_Click(object sender, EventArgs e)
+        {
+
         }
     }//end of class
 }
