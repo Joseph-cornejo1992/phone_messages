@@ -31,6 +31,7 @@
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
             this.updateButton = new System.Windows.Forms.Button();
             this.reprintButton = new System.Windows.Forms.Button();
+            this.Printed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView4)).BeginInit();
             this.SuspendLayout();
             // 
@@ -39,9 +40,12 @@
             this.dataGridView4.AllowUserToAddRows = false;
             this.dataGridView4.AllowUserToDeleteRows = false;
             this.dataGridView4.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView4.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Printed});
+            this.dataGridView4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView4.Location = new System.Drawing.Point(0, 0);
             this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.Size = new System.Drawing.Size(776, 495);
+            this.dataGridView4.Size = new System.Drawing.Size(776, 556);
             this.dataGridView4.TabIndex = 0;
             this.dataGridView4.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView4_CellContentClick);
             // 
@@ -71,6 +75,11 @@
             this.reprintButton.Text = "Print";
             this.reprintButton.UseVisualStyleBackColor = false;
             this.reprintButton.Click += new System.EventHandler(this.reprintButton_Click);
+            // 
+            // Printed
+            // 
+            this.Printed.HeaderText = "Printed?";
+            this.Printed.Name = "Printed";
             // 
             // ReceivedMessages
             // 
@@ -120,5 +129,6 @@
         private System.Windows.Forms.DataGridView dataGridView4;
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.Button reprintButton;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Printed;
     }
 }

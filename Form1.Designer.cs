@@ -47,13 +47,14 @@
             this.doctor_label = new System.Windows.Forms.Label();
             this.doctorComboBox2 = new System.Windows.Forms.ComboBox();
             this.infoPanel = new System.Windows.Forms.Panel();
+            this.otherTextBox = new System.Windows.Forms.TextBox();
             this.patientInfoPanel = new System.Windows.Forms.Panel();
             this.operatorLabel = new System.Windows.Forms.Label();
             this.operatorTextBox = new System.Windows.Forms.TextBox();
             this.telephoneLabel = new System.Windows.Forms.Label();
             this.phoneTextBox = new System.Windows.Forms.TextBox();
             this.reviewMessagesButton = new System.Windows.Forms.Button();
-            this.otherTextBox = new System.Windows.Forms.TextBox();
+            this.newMessageButton = new System.Windows.Forms.Button();
             this.infoPanel.SuspendLayout();
             this.patientInfoPanel.SuspendLayout();
             this.SuspendLayout();
@@ -274,6 +275,14 @@
             this.infoPanel.TabIndex = 19;
             this.infoPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.infoPanel_Paint);
             // 
+            // otherTextBox
+            // 
+            this.otherTextBox.Location = new System.Drawing.Point(7, 97);
+            this.otherTextBox.Name = "otherTextBox";
+            this.otherTextBox.Size = new System.Drawing.Size(219, 20);
+            this.otherTextBox.TabIndex = 8;
+            this.otherTextBox.Visible = false;
+            // 
             // patientInfoPanel
             // 
             this.patientInfoPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
@@ -345,13 +354,16 @@
             this.reviewMessagesButton.UseVisualStyleBackColor = false;
             this.reviewMessagesButton.Click += new System.EventHandler(this.reviewMessagesButton_Click);
             // 
-            // otherTextBox
+            // newMessageButton
             // 
-            this.otherTextBox.Location = new System.Drawing.Point(7, 97);
-            this.otherTextBox.Name = "otherTextBox";
-            this.otherTextBox.Size = new System.Drawing.Size(219, 20);
-            this.otherTextBox.TabIndex = 8;
-            this.otherTextBox.Visible = false;
+            this.newMessageButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.newMessageButton.Location = new System.Drawing.Point(21, 11);
+            this.newMessageButton.Name = "newMessageButton";
+            this.newMessageButton.Size = new System.Drawing.Size(159, 34);
+            this.newMessageButton.TabIndex = 22;
+            this.newMessageButton.Text = "New Message";
+            this.newMessageButton.UseVisualStyleBackColor = false;
+            this.newMessageButton.Click += new System.EventHandler(this.newMessageButton_Click);
             // 
             // enterPhoneMessages
             // 
@@ -359,6 +371,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(908, 604);
+            this.Controls.Add(this.newMessageButton);
             this.Controls.Add(this.reviewMessagesButton);
             this.Controls.Add(this.patientInfoPanel);
             this.Controls.Add(this.infoPanel);
@@ -406,6 +419,7 @@
         private System.Windows.Forms.Label operatorLabel;
         private System.Windows.Forms.Button reviewMessagesButton;
         private System.Windows.Forms.TextBox otherTextBox;
+        private System.Windows.Forms.Button newMessageButton;
     }
 }
 

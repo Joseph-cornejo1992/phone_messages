@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
+using System.Drawing.Printing;
+using System.IO;
+using System.Diagnostics;
 
 namespace PhoneMessages
 {
@@ -61,14 +63,6 @@ namespace PhoneMessages
             {
                 conn.Open();
 
-                if (conn.State == ConnectionState.Closed)
-                {
-                    MessageBox.Show("Connection Closed");
-                }
-                if (conn.State == ConnectionState.Open)
-                {
-                    MessageBox.Show("Connection open");
-                }
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO phone_messages (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)VALUES(@account_number, @first_name, @last_name, @status, @doctor, @date, @time, @age, @telephone_number, @message, @operator)", conn);
                 cmd.Parameters.AddWithValue("@account_number",acctNumber);
                 cmd.Parameters.AddWithValue("@first_name",fName);
@@ -81,31 +75,16 @@ namespace PhoneMessages
                 cmd.Parameters.AddWithValue("@telephone_number",pNumber);
                 cmd.Parameters.AddWithValue("@message",message);
                 cmd.Parameters.AddWithValue("@operator",operator1);
-                if (conn.State == ConnectionState.Closed)
-                {
-                    MessageBox.Show("Connection 1 Closed");
-                }
-                if (conn.State == ConnectionState.Open)
-                {
-                    MessageBox.Show("Connection 1 open");
-                }
-                cmd.ExecuteNonQuery();
+                writeText(status, doctor, acctNumber, date1, time, fName, lName, age, pNumber, message, operator1);
+                filePrint();
 
+           // cmd.ExecuteNonQuery();
+               
                 conn.Close();
-                MessageBox.Show("connection closed");
-               if( conn.State == ConnectionState.Closed)
-                {
-                    MessageBox.Show("Connection 2 Closed");
-                }
-                if (conn.State == ConnectionState.Open)
-                {
-                    MessageBox.Show("Connection 2 open");
-                }
             }
 
             catch (Exception ex)
             {
-                //MessageBox.Show(" Can't open connection ! ");
                 string error = string.Format("Exception: {0}", ex.Message);
             }
 
@@ -243,6 +222,103 @@ namespace PhoneMessages
             {
                 otherTextBox.Visible = true;
             }
+        }
+
+        private void writeText(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k)
+        {
+            f = f.ToUpper();
+            g = g.ToUpper();
+            string introduction = ("You have a new message for Dr." + b + ". The status is: " + a);
+            string time = ("\nThis message was sent on " + d + " at " + e);
+            string patientInfo = ("\n\nFor Patient: " + g + ", " + f + "\naccount number: " + c + "\nAge: " + h);
+            string telephone = ("Patient's phone number: " + i);
+            string patientMessage = ("\n\nMessage: \n" + j);
+            string operator1 = ("\nFrom Operator: " + k + "\n\n\n\n\n\n\n");
+
+            string receivedBy = ("Message Delivered On: Date_______________, Time___________,\n\nBY________________\n");
+            string actionTaken = ("ACTION TAKEN: __________________________________________________________ \n\n");
+            string extraLines = ("___________________________________________________________\n\n");
+            string nurse = ("NURSE:________________ DATE:__________ TIME:__________ A.M. P.M.\n\n");
+            string physician = ("PHYSICIAN:__________________________ DATE:________________");
+            string[] lines = {introduction, time, patientInfo, telephone, patientMessage, operator1, receivedBy, actionTaken, extraLines, extraLines, extraLines, extraLines, nurse, physician};
+
+            System.IO.File.WriteAllLines(@"C:\Users\Public\WriteLines.txt", lines);
+        }
+        //File Location that is going to be printed
+        //Make sure that it matches the location the program is writing to. 
+        string filename = (@"C:\Users\Public\WriteLines.txt");
+        //Create a Verdana font with size 10
+        Font verdana10Font = new Font("Verdana", 10);
+
+        private void filePrint()
+        {
+
+            //Create a PrintDocument object
+            PrintDocument pd = new PrintDocument();
+            //Add PrintPage event handler
+            pd.PrintPage += new PrintPageEventHandler(this.PrintTextFileHandler);
+            //Call Print Method
+            pd.Print();
+            StreamReader reader = new StreamReader(filename);
+            //Close the reader
+            if (reader != null)
+                reader.Close();
+        }
+
+        private void PrintTextFileHandler(object sender, PrintPageEventArgs ppeArgs)
+        {
+            StreamReader reader = new StreamReader(filename);
+            //Get the Graphics object
+            Graphics g = ppeArgs.Graphics;
+            float linesPerPage = 0;
+            float yPos = 0;
+            int count = 0;
+            //Read margins from PrintPageEventArgs
+            float leftMargin = ppeArgs.MarginBounds.Left;
+            float topMargin = ppeArgs.MarginBounds.Top;
+            string line = null;
+            //Calculate the lines per page on the basis of the height of the page and the height of the font
+            linesPerPage = ppeArgs.MarginBounds.Height /
+            verdana10Font.GetHeight(g);
+            //Now read lines one by one, using StreamReader
+            while (count < linesPerPage &&
+            ((line = reader.ReadLine()) != null))
+            {
+                //Calculate the starting position
+                yPos = topMargin + (count *
+                verdana10Font.GetHeight(g));
+                //Draw text
+                g.DrawString(line, verdana10Font, Brushes.Black,
+                leftMargin, yPos, new StringFormat());
+                //Move to next line
+                count++;
+            }
+            //If PrintPageEventArgs has more pages to print
+            if (line != null)
+            {
+                ppeArgs.HasMorePages = true;
+            }
+            else
+            {
+                ppeArgs.HasMorePages = false;
+            }
+        }
+
+        private void newMessageButton_Click(object sender, EventArgs e)
+        {
+            //This function clears the application so a new message can be started
+
+            firstNameTextBox.Text = String.Empty;
+            lastNameTextBox.Text = String.Empty;
+            phoneTextBox.Text = String.Empty;
+            accountTextBox.Text = String.Empty;
+            messageTextBox.Text = String.Empty;
+            ageTextBox.Text = String.Empty;
+            operatorTextBox.Text = String.Empty;
+
+            statusComboBox1.Text = String.Empty;
+            doctorComboBox2.Text = String.Empty;
+
         }
     }
 }
