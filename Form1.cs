@@ -63,6 +63,7 @@ namespace PhoneMessages
             {
                 conn.Open();
 
+                //inserts paramaters into mysql command
                 MySqlCommand cmd = new MySqlCommand("INSERT INTO phone_messages (account_number, first_name, last_name, status, doctor, date, time, age, telephone_number, message, operator)VALUES(@account_number, @first_name, @last_name, @status, @doctor, @date, @time, @age, @telephone_number, @message, @operator)", conn);
                 cmd.Parameters.AddWithValue("@account_number",acctNumber);
                 cmd.Parameters.AddWithValue("@first_name",fName);
@@ -78,7 +79,7 @@ namespace PhoneMessages
                 writeText(status, doctor, acctNumber, date1, time, fName, lName, age, pNumber, message, operator1);
                 filePrint();
 
-           // cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
                
                 conn.Close();
             }

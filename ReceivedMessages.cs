@@ -37,22 +37,25 @@ namespace PhoneMessages
 
         private void button3_Click(object sender, EventArgs e)
         {
+            dt.Clear();
             get_data();
-
         }
 
         private void get_data()
         {
             try
             {
+                //closes connection
                 conn.Open();
+                //fills the data table with mysql query
                 String query = "SELECT status,doctor,last_Name,account_number,date,time,message_ID FROM phone_messages";
                 MySqlDataAdapter MSDA = new MySqlDataAdapter(query, conn);
                 MSDA.Fill(dt);
                 dataGridView4.DataSource = dt;
-
+                //close connection
                 conn.Close();
 
+                //some settings that needed to be changed for functionality purposes
                 dataGridView4.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dataGridView4.MultiSelect = false;
                 dataGridView4.RowsDefaultCellStyle.BackColor = Color.LightGray;
@@ -68,9 +71,43 @@ namespace PhoneMessages
 
         private void reprintButton_Click(object sender, EventArgs e)
         {
+            string doc, status, fName, lName, accNum, time, date, age, pNumber, mess, op;
+            //Gets message ID from selected row and turns it into an int. 
             Int32.TryParse(dt.Rows[dataGridView4.CurrentCell.RowIndex]["message_ID"].ToString(), out int selected);
             MessageBox.Show("Int that is showing: " + selected);
-            
+            MySqlCommand cmd = new MySqlCommand("SELECT doctor, status, first_name, last_name, account_number, time, date, age, telephone_number, message, operator FROM phone_messages WHERE message_ID = @selected ", conn);
+            cmd.Parameters.AddWithValue("@selected", selected);
+            try
+            {
+                conn.Open();
+                MySqlDataReader rdr = null;
+                rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    doc = (string)rdr["doctor"];
+                    status = (string)rdr["status"];
+                    fName = (string)rdr["first_name"];
+                    lName = (string)rdr["last_name"];
+                    accNum = (string)rdr["account_number"];
+                    time = (string)rdr["time"];
+                    date = (string)rdr["date"];
+                    age = (string)rdr["age"];
+                    pNumber = (string)rdr["telephone_number"];
+                    mess = (string)rdr["message"];
+                    op = (string)rdr["operator"];
+
+                    MessageBox.Show(doc + "status:" + status + accNum);
+                    writeText(doc, status, fName, lName, accNum, time, date, age, pNumber, mess, op);
+                    filePrint();
+                }
+
+                rdr.Close();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                string error = string.Format("Exception: {0}", ex.Message);
+            }
 
         }
 
