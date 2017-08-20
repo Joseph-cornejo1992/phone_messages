@@ -17,10 +17,12 @@ namespace PhoneMessages
     {
         public ReceivedMessages()
         {
+            //initializes deadGridView and gets data when screen opens up
             DataGridView dataGridView4 = new DataGridView();
             InitializeComponent();
             get_data();
         }
+        //Initializes datatable and connection
         DataTable dt = new DataTable();
         MySqlConnection conn = new MySqlConnection("Data Source=10.0.0.17;Port=3306;Initial Catalog=phone_messages;User ID=phone_messages;Password=Ei1CW10ncoCHsaUp");
 
@@ -37,6 +39,7 @@ namespace PhoneMessages
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //resets table in order to not 
             dt.Clear();
             get_data();
         }
@@ -45,7 +48,7 @@ namespace PhoneMessages
         {
             try
             {
-                //closes connection
+                //opens connection 
                 conn.Open();
                 //fills the data table with mysql query
                 String query = "SELECT status,doctor,last_Name,account_number,date,time,message_ID FROM phone_messages";
@@ -71,10 +74,11 @@ namespace PhoneMessages
 
         private void reprintButton_Click(object sender, EventArgs e)
         {
+            //initializes string variables that will serve as containers
             string doc, status, fName, lName, accNum, time, date, age, pNumber, mess, op;
             //Gets message ID from selected row and turns it into an int. 
             Int32.TryParse(dt.Rows[dataGridView4.CurrentCell.RowIndex]["message_ID"].ToString(), out int selected);
-            MessageBox.Show("Int that is showing: " + selected);
+            //populates mysql command
             MySqlCommand cmd = new MySqlCommand("SELECT doctor, status, first_name, last_name, account_number, time, date, age, telephone_number, message, operator FROM phone_messages WHERE message_ID = @selected ", conn);
             cmd.Parameters.AddWithValue("@selected", selected);
             try
@@ -84,6 +88,7 @@ namespace PhoneMessages
                 rdr = cmd.ExecuteReader();
                 while (rdr.Read())
                 {
+                    //holds results from query
                     doc = (string)rdr["doctor"];
                     status = (string)rdr["status"];
                     fName = (string)rdr["first_name"];
@@ -96,11 +101,12 @@ namespace PhoneMessages
                     mess = (string)rdr["message"];
                     op = (string)rdr["operator"];
 
-                    MessageBox.Show(doc + "status:" + status + accNum);
+                    //writes text to textfile
                     writeText(doc, status, fName, lName, accNum, time, date, age, pNumber, mess, op);
+                    //pints text file
                     filePrint();
                 }
-
+                //closes reader and connection
                 rdr.Close();
                 conn.Close();
             }
@@ -118,8 +124,11 @@ namespace PhoneMessages
 
         private void writeText(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k)
         {
+            //formats the patients name to be in all uppercase
             f = f.ToUpper();
             g = g.ToUpper();
+
+            //does some formatting for the message
             string introduction = ("You have a new message for Dr." + b + ". The status is: " + a);
             string time = ("\nThis message was sent on " + d + " at " + e);
             string patientInfo = ("\n\nFor Patient: " + g + ", " + f + "\naccount number: " + c + "\nAge: " + h);
@@ -132,8 +141,9 @@ namespace PhoneMessages
             string extraLines = ("___________________________________________________________\n\n");
             string nurse = ("NURSE:________________ DATE:__________ TIME:__________ A.M. P.M.\n\n");
             string physician = ("PHYSICIAN:__________________________ DATE:________________");
+            //puts all strings into an array
             string[] lines = { introduction, time, patientInfo, telephone, patientMessage, operator1, receivedBy, actionTaken, extraLines, extraLines, extraLines, extraLines, nurse, physician };
-
+            //writes array of strings to file
             System.IO.File.WriteAllLines(@"C:\Users\Public\WriteLines.txt", lines);
         }
         //File Location that is going to be printed

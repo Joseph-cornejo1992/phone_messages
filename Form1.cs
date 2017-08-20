@@ -36,7 +36,7 @@ namespace PhoneMessages
                 return;
             }
 
-            //extracts variables from text and comboboxes
+            //extracts variables from text and comboboxes after error check
             string fName = firstNameTextBox.Text;
             string lName = lastNameTextBox.Text;
             string pNumber = phoneTextBox.Text;
@@ -61,6 +61,7 @@ namespace PhoneMessages
 
             try
             {
+                //opens connection
                 conn.Open();
 
                 //inserts paramaters into mysql command
@@ -76,11 +77,14 @@ namespace PhoneMessages
                 cmd.Parameters.AddWithValue("@telephone_number",pNumber);
                 cmd.Parameters.AddWithValue("@message",message);
                 cmd.Parameters.AddWithValue("@operator",operator1);
-                writeText(status, doctor, acctNumber, date1, time, fName, lName, age, pNumber, message, operator1);
-                filePrint();
 
+                //write function that adds variables to text file
+                writeText(status, doctor, acctNumber, date1, time, fName, lName, age, pNumber, message, operator1);
+                //print function that prints text file
+                filePrint();
+                //stores the phone message in database
                 cmd.ExecuteNonQuery();
-               
+               //closes connection
                 conn.Close();
             }
 
@@ -206,6 +210,7 @@ namespace PhoneMessages
 
         private void reviewMessagesButton_Click(object sender, EventArgs e)
         {
+            //this opens up the recieved messages portal
             ReceivedMessages rm = new ReceivedMessages();
             rm.Show();
         }
@@ -217,7 +222,7 @@ namespace PhoneMessages
 
         private void doctorComboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {   
-            //if doctorcomboBox is set to "other", this sets the otherTextBox to visible 
+            //if doctorcomboBox is set to "other", this sets the otherTextBox to visible so a name can be typed in 
             string doctor = this.doctorComboBox2.GetItemText(this.doctorComboBox2.SelectedItem);
             if (string.Equals(doctor, "Other") == true)
             {
@@ -227,8 +232,11 @@ namespace PhoneMessages
 
         private void writeText(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k)
         {
+            //formats the patients name to be in all uppercase
             f = f.ToUpper();
             g = g.ToUpper();
+
+            //does some formatting for the message
             string introduction = ("You have a new message for Dr." + b + ". The status is: " + a);
             string time = ("\nThis message was sent on " + d + " at " + e);
             string patientInfo = ("\n\nFor Patient: " + g + ", " + f + "\naccount number: " + c + "\nAge: " + h);
@@ -241,8 +249,9 @@ namespace PhoneMessages
             string extraLines = ("___________________________________________________________\n\n");
             string nurse = ("NURSE:________________ DATE:__________ TIME:__________ A.M. P.M.\n\n");
             string physician = ("PHYSICIAN:__________________________ DATE:________________");
+            //puts all strings into an array
             string[] lines = {introduction, time, patientInfo, telephone, patientMessage, operator1, receivedBy, actionTaken, extraLines, extraLines, extraLines, extraLines, nurse, physician};
-
+            //writes array of strings to file
             System.IO.File.WriteAllLines(@"C:\Users\Public\WriteLines.txt", lines);
         }
         //File Location that is going to be printed
@@ -263,7 +272,10 @@ namespace PhoneMessages
             StreamReader reader = new StreamReader(filename);
             //Close the reader
             if (reader != null)
+            {
+                //close reader
                 reader.Close();
+            }
         }
 
         private void PrintTextFileHandler(object sender, PrintPageEventArgs ppeArgs)
